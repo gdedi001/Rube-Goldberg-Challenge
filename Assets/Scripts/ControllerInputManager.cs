@@ -48,10 +48,10 @@ public class ControllerInputManager : MonoBehaviour {
 
                     RaycastHit groundRay;
                     if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 10, laserMask)) {
-                        teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, groundRay.point.y, transform.forward.z * 15 + transform.position.z);
+                        teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, groundRay.point.y, transform.forward.z * 10 + transform.position.z);
                     }
 
-                    laser.SetPosition(1, transform.forward * 15 + transform.position);
+                    laser.SetPosition(1, transform.forward * 10 + transform.position);
                     // aimer position
                     teleportAimerObject.transform.position = teleportLocation + new Vector3(0, 0, 0);
                 }
@@ -63,5 +63,9 @@ public class ControllerInputManager : MonoBehaviour {
                 player.transform.position = teleportLocation;
             }
         }   
+    }
+
+    private void OnTriggerStay(Collider col) {
+        
     }
 }

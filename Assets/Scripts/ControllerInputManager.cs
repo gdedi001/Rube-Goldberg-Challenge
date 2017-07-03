@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class ControllerInputManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
-    public SteamVR_Controller.Device device;
+    private SteamVR_Controller.Device device;
+    public bool isLeft;
+    public float throwForce = 1.5f;
+
 
     // Teleporter
     private LineRenderer laser; // laser pointer
@@ -14,7 +17,6 @@ public class ControllerInputManager : MonoBehaviour {
     public LayerMask laserMask; // Where you can teleport to
     //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
-    public bool isLeft;
 
     // Use this for initialization
     void Start() {
@@ -27,7 +29,7 @@ public class ControllerInputManager : MonoBehaviour {
         device = SteamVR_Controller.Input((int)trackedObj.index);
 
         if (isLeft) {
-            if (device.GetPress(SteamVR_Controller.ButtonMask.Trigger)) {
+            if (device.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(true);
                 teleportAimerObject.gameObject.SetActive(true);
 
@@ -57,7 +59,7 @@ public class ControllerInputManager : MonoBehaviour {
                 }
             }
 
-            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger)) {
+            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
                 player.transform.position = teleportLocation;
@@ -66,6 +68,31 @@ public class ControllerInputManager : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider col) {
-        
+        if (col.gameObject.CompareTag("Throwable")) {
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
+                GrabObject(col);
+            }
+            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger)) {
+                ThrowObject(col);
+            }
+        }
+    }
+
+    void GrabObject(Collider col) {
+        col.transform.SetParent(gameObject.transform); // attach the object to our controller
+        col.GetComponent<Rigidbody>().isKinematic = true; // turn off physics
+        device.TriggerHapticPulse(8000); // controller vibration
+        Debug.Log("You are touching down the trigger on an object.");
+    }
+
+    void ThrowObject(Collider col) {
+        col.transform.SetParent(null); // detach object from controller
+        Rigidbody rigidBody = col.GetComponent<Rigidbody>();
+        rigidBody.isKinematic = false; // turn on physics
+
+        // Set velocity based on controller movement
+        rigidBody.velocity = device.velocity * throwForce;
+        rigidBody.angularVelocity = device.angularVelocity;
+        Debug.Log("You have released the trigger");
     }
 }

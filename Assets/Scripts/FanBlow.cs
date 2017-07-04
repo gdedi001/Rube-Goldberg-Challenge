@@ -14,7 +14,8 @@ public class FanBlow : MonoBehaviour {
 		
 	}
 
-    private void OnTriggerStay(Collider col) {
+    void OnTriggerStay(Collider col) {
         Debug.Log(col.gameObject.name);
+        //col.gameObject.rigidbody
     }
 }

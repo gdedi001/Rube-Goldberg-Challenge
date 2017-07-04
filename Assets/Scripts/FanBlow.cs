@@ -15,7 +15,18 @@ public class FanBlow : MonoBehaviour {
 	}
 
     void OnTriggerStay(Collider col) {
-        Debug.Log(col.gameObject.name);
-        //col.gameObject.rigidbody
+        GameObject ball = col.gameObject;
+        if (col.gameObject.name == "Ball") {
+            Debug.Log("hit fan");
+            Blow(ball);
+        }
     }
+
+    void Blow(GameObject ball) {
+
+        Debug.Log("Blowing...");
+        int fanStrength = 35;
+        ball.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
+    }
+    
 }

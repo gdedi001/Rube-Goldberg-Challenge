@@ -14,14 +14,14 @@ public class BallReset : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter(Collision col) {
+    void OnCollisionEnter(Collision col) {
         if (col.gameObject.name == "FloorPlane") {
             Debug.Log("Hit Floor");
             ResetBall();
         }
     }
 
-    private void ResetBall() {
+    void ResetBall() {
         float yNudge = 0.5314798f; // used to properly place ball at top of pedistal
         Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
         rigidBody.velocity = new Vector3(0,0,0);

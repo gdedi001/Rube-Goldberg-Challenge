@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\BallReset.cs" />
     <Compile Include="Assets\Scripts\ControllerInputManager.cs" />
+    <Compile Include="Assets\Scripts\FanBlow.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_LaserPointer.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_Teleporter.cs" />

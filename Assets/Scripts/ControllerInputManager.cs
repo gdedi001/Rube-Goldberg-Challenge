@@ -5,17 +5,27 @@ using UnityEngine;
 public class ControllerInputManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     private SteamVR_Controller.Device device;
-    public bool isLeft;
-    public bool isRight;
-    public float throwForce = 1.5f;
 
+    // Choose Hand
+    [SerializeField]
+    private bool isLeft;
+    [SerializeField]
+    private bool isRight;
+
+    // Force applied to thrown objects
+    private float throwForce = 1.5f;
+
+    // Menu
+    private GameObject objectMenu;
 
     // Teleporter
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private LayerMask laserMask; // Where you can teleport to
     private LineRenderer laser; // laser pointer
-    public GameObject teleportAimerObject; // teleport cylinder
-    public Vector3 teleportLocation; // teleport 3D position
-    public GameObject player;
-    public LayerMask laserMask; // Where you can teleport to
+    private GameObject teleportAimerObject; // teleport cylinder
+    private Vector3 teleportLocation; // teleport 3D position
     //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
 
@@ -29,6 +39,8 @@ public class ControllerInputManager : MonoBehaviour {
     void Update() {
         device = SteamVR_Controller.Input((int)trackedObj.index);
 
+
+        // Left hand functionality
         if (isLeft) {
             if (device.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(true);
@@ -60,6 +72,8 @@ public class ControllerInputManager : MonoBehaviour {
                 }
             }
 
+
+            // Right hand functionality
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
@@ -68,10 +82,14 @@ public class ControllerInputManager : MonoBehaviour {
         }
 
         if (isRight) {
-
+            objectMenu = transform.Find("ObjectMenu").gameObject; //Finds and asigns the child (ObjectMenu) of the right controller 
+            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)) {
+                
+            }
         }
     }
 
+    // Physics frames
     private void OnTriggerStay(Collider col) {
         if (col.gameObject.CompareTag("Throwable")) {
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
@@ -83,6 +101,7 @@ public class ControllerInputManager : MonoBehaviour {
         }
     }
 
+    // Physics methods for interacting with objects
     void GrabObject(Collider col) {
         col.transform.SetParent(gameObject.transform); // attach the object to our controller
         col.GetComponent<Rigidbody>().isKinematic = true; // turn off physics

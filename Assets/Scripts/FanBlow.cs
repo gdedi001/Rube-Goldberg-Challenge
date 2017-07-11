@@ -22,11 +22,11 @@ public class FanBlow : MonoBehaviour {
         }
     }
 
-    void Blow(GameObject ball) {
+    void Blow(GameObject item) {
 
         Debug.Log("Blowing...");
         int fanStrength = 35;
-        ball.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
+        item.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
     }
     
 }

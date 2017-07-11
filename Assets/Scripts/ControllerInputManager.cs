@@ -6,6 +6,7 @@ public class ControllerInputManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     private SteamVR_Controller.Device device;
     public bool isLeft;
+    public bool isRight;
     public float throwForce = 1.5f;
 
 
@@ -64,7 +65,11 @@ public class ControllerInputManager : MonoBehaviour {
                 teleportAimerObject.gameObject.SetActive(false);
                 player.transform.position = teleportLocation;
             }
-        }   
+        }
+
+        if (isRight) {
+
+        }
     }
 
     private void OnTriggerStay(Collider col) {

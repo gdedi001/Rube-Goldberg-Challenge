@@ -43,9 +43,8 @@ public class ObjectMenuManager : MonoBehaviour {
     }
 
     public void SpawnCurrentObject() {
-        // targets the 
-        Instantiate(objectPrefabList[currentObject].transform.GetChild(0), 
-            objectList[currentObject].transform.position,
-            objectList[currentObject].transform.rotation);
+        GameObject item = objectPrefabList[currentObject].transform.GetChild(0).gameObject;
+        // targets the actual object in our menu
+        Instantiate(item, item.transform.position, item.transform.rotation);
     }
 }

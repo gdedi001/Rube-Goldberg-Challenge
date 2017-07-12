@@ -13,9 +13,15 @@ public class ControllerInputManager : MonoBehaviour {
     // Force applied to thrown objects
     private float throwForce = 1.5f;
 
-    // Menu
+    // Menu / Swipping mechanism
     [SerializeField]
     private ObjectMenuManager objectMenu;
+    private float swipeSum;
+    private float touchLast;
+    private float touchCurrent;
+    private float distance;
+    private bool hasSwipedLeft;
+    private bool hasSwipedRight;
 
     // Teleporter
     [SerializeField]
@@ -79,15 +85,47 @@ public class ControllerInputManager : MonoBehaviour {
 
 
         // Right hand functionality
-        if (!isLeftHand) { 
-            // When left finger is lifted from touchpad
-            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)) {
-                objectMenu.gameObject.SetActive(false);
+        if (!isLeftHand) {
+            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+                touchLast = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
             }
 
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
-                objectMenu.gameObject.SetActive(true);
-                
+            if (device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
+                touchCurrent = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x; // get location of thumb with respect to x-axis
+                distance = touchCurrent - touchLast;
+                touchLast = touchCurrent; // cache our position for the next frame
+                swipeSum += distance;
+
+                if (!hasSwipedRight) {
+                    if (swipeSum > 0.5f) {
+                        swipeSum = 0;
+                        SwipeRight();
+                        hasSwipedRight = true;
+                        hasSwipedLeft = false;
+                    }
+                }
+
+                if (!hasSwipedLeft) {
+                    if (swipeSum < -0.5f) {
+                        swipeSum = 0;
+                        SwipeLeft();
+                        hasSwipedLeft = true;
+                        hasSwipedRight = false;
+                    }
+                }
+
+                if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+                    SpawnObject();
+                }
+            }
+
+            // Restart variables when finger is lifted
+            if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad)) {
+                swipeSum = 0;
+                touchCurrent = 0;
+                touchLast = 0;
+                hasSwipedLeft = false;
+                hasSwipedRight = false;
             }
         }
     }

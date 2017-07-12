@@ -15,7 +15,7 @@ public class BallReset : MonoBehaviour {
 	}
 
     void OnCollisionEnter(Collision col) {
-        if (col.gameObject.name == "FloorPlane") {
+        if (col.gameObject.tag == "Ground") {
             Debug.Log("Hit Floor");
             ResetBall();
         }

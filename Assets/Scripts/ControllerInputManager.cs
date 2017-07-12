@@ -14,7 +14,8 @@ public class ControllerInputManager : MonoBehaviour {
     private float throwForce = 1.5f;
 
     // Menu
-    private GameObject objectMenu;
+    [SerializeField]
+    private ObjectMenuManager objectMenu;
 
     // Teleporter
     [SerializeField]
@@ -69,8 +70,6 @@ public class ControllerInputManager : MonoBehaviour {
                 }
             }
 
-
-            // Right hand functionality
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
@@ -78,10 +77,16 @@ public class ControllerInputManager : MonoBehaviour {
             }
         }
 
-        if (!isLeftHand) {
-            objectMenu = transform.Find("ObjectMenu").gameObject; 
+
+        // Right hand functionality
+        if (!isLeftHand) { 
             // When left finger is lifted from touchpad
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)) {
+                objectMenu.gameObject.SetActive(false);
+            }
+
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+                objectMenu.gameObject.SetActive(true);
                 
             }
         }
@@ -117,4 +122,21 @@ public class ControllerInputManager : MonoBehaviour {
         rigidBody.angularVelocity = device.angularVelocity;
         Debug.Log("You have released the trigger");
     }
+
+    
+    // Menu interaction methods
+    void SpawnObject() {
+        objectMenu.SpawnCurrentObject();
+    }
+
+    void SwipeLeft() {
+        objectMenu.MenuLeft();
+        Debug.Log("SwipeLeft");
+    }
+
+    void SwipeRight() {
+        objectMenu.MenuRight();
+        Debug.Log("SwipeRight");
+    } 
+    
 }

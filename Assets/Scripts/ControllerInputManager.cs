@@ -8,9 +8,7 @@ public class ControllerInputManager : MonoBehaviour {
 
     // Choose Hand
     [SerializeField]
-    private bool isLeft;
-    [SerializeField]
-    private bool isRight;
+    private bool isLeftHand;
 
     // Force applied to thrown objects
     private float throwForce = 1.5f;
@@ -41,7 +39,7 @@ public class ControllerInputManager : MonoBehaviour {
 
 
         // Left hand functionality
-        if (isLeft) {
+        if (isLeftHand) {
             if (device.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(true);
                 teleportAimerObject.gameObject.SetActive(true);
@@ -55,7 +53,6 @@ public class ControllerInputManager : MonoBehaviour {
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
                     teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y, teleportLocation.z);
-
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
@@ -81,8 +78,9 @@ public class ControllerInputManager : MonoBehaviour {
             }
         }
 
-        if (isRight) {
-            objectMenu = transform.Find("ObjectMenu").gameObject; //Finds and asigns the child (ObjectMenu) of the right controller 
+        if (!isLeftHand) {
+            objectMenu = transform.Find("ObjectMenu").gameObject; 
+            // When left finger is lifted from touchpad
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad)) {
                 
             }

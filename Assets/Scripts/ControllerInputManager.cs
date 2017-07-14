@@ -28,8 +28,9 @@ public class ControllerInputManager : MonoBehaviour {
     private GameObject player;
     [SerializeField]
     private LayerMask laserMask; // Where you can teleport to
-    private LineRenderer laser; // laser pointer
+    [SerializeField]
     private GameObject teleportAimerObject; // teleport cylinder
+    private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
     //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
@@ -43,7 +44,6 @@ public class ControllerInputManager : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         device = SteamVR_Controller.Input((int)trackedObj.index);
-
 
         // Left hand functionality
         if (isLeftHand) {
@@ -84,13 +84,14 @@ public class ControllerInputManager : MonoBehaviour {
         }
 
 
-        // Right hand functionality
+        // Right hand functionality - Menu
         if (!isLeftHand) {
             if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad)) {
                 touchLast = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
             }
 
             if (device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
+                EnableMenu();
                 touchCurrent = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x; // get location of thumb with respect to x-axis
                 distance = touchCurrent - touchLast;
                 touchLast = touchCurrent; // cache our position for the next frame
@@ -114,7 +115,7 @@ public class ControllerInputManager : MonoBehaviour {
                     }
                 }
 
-                if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad)) {
+                if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
                     SpawnObject();
                 }
             }
@@ -126,6 +127,7 @@ public class ControllerInputManager : MonoBehaviour {
                 touchLast = 0;
                 hasSwipedLeft = false;
                 hasSwipedRight = false;
+                DisableMenu();
             }
         }
     }
@@ -175,6 +177,13 @@ public class ControllerInputManager : MonoBehaviour {
     void SwipeRight() {
         objectMenu.MenuRight();
         Debug.Log("SwipeRight");
-    } 
+    }
+
+    void EnableMenu() {
+        objectMenu.gameObject.SetActive(true);
+    }
     
+    void DisableMenu() {
+        objectMenu.gameObject.SetActive(false);
+    }
 }

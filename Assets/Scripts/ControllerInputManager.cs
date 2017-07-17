@@ -27,13 +27,15 @@ public class ControllerInputManager : MonoBehaviour {
     [SerializeField]
     private GameObject player;
     [SerializeField]
-    private GameObject ball; // Used to call associated methods to prevent cheating
+    private Ball ball; // Used to call associated methods to prevent cheating
     [SerializeField]
     private LayerMask laserMask; // Where you can teleport to
     [SerializeField]
     private GameObject teleportAimerObject; // teleport cylinder
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
+    private string playArea = "PlayArea";
+    private RaycastHit hit;
     //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
 
@@ -55,13 +57,7 @@ public class ControllerInputManager : MonoBehaviour {
 
                 laser.SetPosition(0, transform.position); // start laser from hand controller
 
-                RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.forward, out hit, 10, laserMask)) {
-
-                    if (hit.transform.gameObject.tag == "PlayArea") {
-                        print("Enable ball");
-                    }
-
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
@@ -71,9 +67,8 @@ public class ControllerInputManager : MonoBehaviour {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
                     //teleportLocation = transform.position + (transform.forward * 15);
 
-                    RaycastHit groundRay;
-                    if (Physics.Raycast(teleportLocation, -Vector3.up, out groundRay, 10, laserMask)) {
-                        teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, groundRay.point.y, transform.forward.z * 10 + transform.position.z);
+                    if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, 10, laserMask)) {
+                        teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, hit.point.y, transform.forward.z * 10 + transform.position.z);
                     }
 
                     laser.SetPosition(1, transform.forward * 10 + transform.position);
@@ -85,7 +80,15 @@ public class ControllerInputManager : MonoBehaviour {
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
-                player.transform.position = teleportLocation;              
+                player.transform.position = teleportLocation;
+
+                // Prevent cheating - disabled the ball when player is not on platform, enable otherwise
+                if (hit.transform.gameObject.tag != playArea) {
+                    ball.DisableBall();
+                }
+                else {
+                    ball.EnableBall();
+                }
             }
         }
 

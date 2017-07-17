@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour {
+    [SerializeField]
+    private GameObject DisabledMarker;
+    SphereCollider BallCollider;
+
+    void Start() {
+        BallCollider = GetComponent<SphereCollider>();
+    }
 
     void OnCollisionEnter(Collision col) {
         int floorLayer = 8;
@@ -22,10 +29,12 @@ public class Ball : MonoBehaviour {
     }
 
     public void DisableBall() {
-
+        BallCollider.enabled = false;
+        DisabledMarker.SetActive(true);
     }
 
     public void EnableBall() {
-
-    } 
+        BallCollider.enabled = true;
+        DisabledMarker.SetActive(false);
+    }
 }

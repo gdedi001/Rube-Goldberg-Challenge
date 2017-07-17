@@ -2,21 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallReset : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class Ball : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
-        if (col.gameObject.tag == "Ground") {
-            Debug.Log("Hit Floor");
+        int floorLayer = 8;
+        if (col.gameObject.layer == floorLayer) {
             ResetBall();
         }
     }
@@ -30,4 +20,12 @@ public class BallReset : MonoBehaviour {
         gameObject.transform.position = new Vector3(resetPos.x, resetPos.y + yNudge, resetPos.z);
         
     }
+
+    public void DisableBall() {
+
+    }
+
+    public void EnableBall() {
+
+    } 
 }

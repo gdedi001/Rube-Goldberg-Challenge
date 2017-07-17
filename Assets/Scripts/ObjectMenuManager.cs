@@ -6,6 +6,8 @@ public class ObjectMenuManager : MonoBehaviour {
     public List<GameObject> objectList; // automatically handled at start
     public List<GameObject> objectPrefabList; // set manually in inspector and MUST match order of scene menu objects.
 
+    public GameObject ActualFan;
+
     public int currentObject = 0;
 
     // Use this for initialization

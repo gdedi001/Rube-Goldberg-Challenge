@@ -27,6 +27,8 @@ public class ControllerInputManager : MonoBehaviour {
     [SerializeField]
     private GameObject player;
     [SerializeField]
+    private GameObject ball; // Used to call associated methods to prevent cheating
+    [SerializeField]
     private LayerMask laserMask; // Where you can teleport to
     [SerializeField]
     private GameObject teleportAimerObject; // teleport cylinder
@@ -45,7 +47,7 @@ public class ControllerInputManager : MonoBehaviour {
     void Update() {
         device = SteamVR_Controller.Input((int)trackedObj.index);
 
-        // Left hand functionality
+        // Left hand functionality - teleportation
         if (isLeftHand) {
             if (device.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(true);
@@ -55,6 +57,10 @@ public class ControllerInputManager : MonoBehaviour {
 
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.forward, out hit, 10, laserMask)) {
+
+                    if (hit.transform.gameObject.tag == "PlayArea") {
+                        print("Enable ball");
+                    }
 
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
@@ -79,7 +85,7 @@ public class ControllerInputManager : MonoBehaviour {
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
-                player.transform.position = teleportLocation;
+                player.transform.position = teleportLocation;              
             }
         }
 
@@ -116,6 +122,7 @@ public class ControllerInputManager : MonoBehaviour {
                 }
 
                 if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
+                    // Spawn object currently selected by menu
                     SpawnObject();
                 }
             }

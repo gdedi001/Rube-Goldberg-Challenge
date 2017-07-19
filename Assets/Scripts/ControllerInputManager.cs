@@ -172,7 +172,6 @@ public class ControllerInputManager : MonoBehaviour {
     }
 
     void PlaceObject(Collider col) {
-        col.transform.position = gameObject.transform.position;
         col.transform.parent = null;
     }
 

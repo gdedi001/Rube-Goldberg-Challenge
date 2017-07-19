@@ -152,6 +152,15 @@ public class ControllerInputManager : MonoBehaviour {
                 ThrowObject(col);
             }
         }
+
+        if (col.gameObject.CompareTag("Structure")) {
+            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
+                GrabObject(col);
+            }
+            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger)) {
+                PlaceObject(col);
+            }
+        }
     }
 
     // Physics methods for interacting with objects
@@ -160,6 +169,11 @@ public class ControllerInputManager : MonoBehaviour {
         col.GetComponent<Rigidbody>().isKinematic = true; // turn off physics
         device.TriggerHapticPulse(8000); // controller vibration
         Debug.Log("You are touching down the trigger on an object.");
+    }
+
+    void PlaceObject(Collider col) {
+        col.transform.position = gameObject.transform.position;
+        col.transform.parent = null;
     }
 
     void ThrowObject(Collider col) {

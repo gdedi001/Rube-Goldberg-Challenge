@@ -38,11 +38,9 @@ public class ObjectMenuManager : MonoBehaviour {
     }
 
     public void SpawnCurrentObject() {
-        //GameObject goldbergObject = objectPrefabList[currentObject].transform.GetChild(2).gameObject;
         GameObject goldbergObject = objectPrefabList[currentObject];
-        Debug.Log(goldbergObject.name);
-        Vector3 test = gameObject.transform.parent.gameObject.transform.position;
-        // targets the actual object in our menu
-        Instantiate(goldbergObject, new Vector3(test.x, test.y, test.z + .8f), goldbergObject.transform.rotation);
+        Vector3 controllerPosition = gameObject.transform.parent.gameObject.transform.position; // targets the position of the actual controller (touch/wand) in 3D space
+        float spawnDistance = .8f; // to prevent the prefab from spawning right in front of our face
+        Instantiate(goldbergObject, new Vector3(controllerPosition.x, controllerPosition.y, controllerPosition.z + spawnDistance), goldbergObject.transform.rotation);
     }
 }

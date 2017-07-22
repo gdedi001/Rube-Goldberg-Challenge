@@ -58,7 +58,7 @@ public class OVRControllerInputManager : MonoBehaviour {
 
         // Left hand functionality - teleportation
         if (!rightHand) {
-            if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, thisController)) {
+            if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, thisController)) {
                 laser.gameObject.SetActive(true);
                 teleportAimerObject.gameObject.SetActive(true);
 
@@ -72,7 +72,7 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
-                    //teleportLocation = transform.position + (transform.forward * 15);
+                    teleportLocation = transform.position + (transform.forward * 10);
                     if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, 10, laserMask)) {
                         teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, hit.point.y, transform.forward.z * 10 + transform.position.z);
                     }
@@ -100,15 +100,17 @@ public class OVRControllerInputManager : MonoBehaviour {
       
         // Right hand functionality - Menu
         if (rightHand) {
-            float menuStickX = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, thisController).x;
+            menuStickX = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, thisController).x;
             
-            if (OVRInput.GetDown(OVRInput.Touch.PrimaryThumbstick, thisController)) {
+            if (OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 EnableMenu();
                 if (menuStickX < 0.45f && menuStickX > -0.45f) {
+                    Debug.Log("Standard Position");
                     menuIsSwipable = true;
                 }
                 if (menuIsSwipable) {
                     if (menuStickX >= 0.45f) {
+                        Debug.Log("right");
                         // fire function that looks at menuList,
                         // disables current item, and enables next item
                         objectMenu.MenuRight();
@@ -125,6 +127,7 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
             }
 
+            // Disables menu when thumb is lifted
             if (OVRInput.GetUp(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 DisableMenu();
             }

@@ -36,7 +36,7 @@ public class ControllerInputManager : MonoBehaviour {
     private Vector3 teleportLocation; // teleport 3D position
     private string playArea = "PlayArea";
     private RaycastHit hit;
-    //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
+    private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
 
     // Use this for initialization
@@ -61,7 +61,7 @@ public class ControllerInputManager : MonoBehaviour {
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
-                    teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y, teleportLocation.z);
+                    teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);

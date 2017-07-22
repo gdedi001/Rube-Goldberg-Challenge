@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OVRControllerInputManager : MonoBehaviour {
-    private SteamVR_TrackedObject trackedObj;
-    private SteamVR_Controller.Device device;
+    private OVRInput.Controller thisController;
 
     // Choose Hand
     [SerializeField]
-    private bool isLeftHand;
+    private bool rightHand;
 
     // Force applied to thrown objects
     private float throwForce = 1.5f;
@@ -22,6 +21,9 @@ public class OVRControllerInputManager : MonoBehaviour {
     private float distance;
     private bool hasSwipedLeft;
     private bool hasSwipedRight;
+    private bool menuIsSwipable;
+    private float menuStickX;
+
 
     // Teleporter
     [SerializeField]
@@ -35,23 +37,28 @@ public class OVRControllerInputManager : MonoBehaviour {
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
     private string playArea = "PlayArea";
+    private float yNudgeAmount = 1f; // specific to teleportAimerObject height
     private RaycastHit hit;
-    //private float yNudgeAmount = 1f; // specific to teleportAimerObject height
 
 
     // Use this for initialization
     void Start() {
-        trackedObj = GetComponent<SteamVR_TrackedObject>();
         laser = GetComponentInChildren<LineRenderer>();
+
+        if (rightHand) {
+            thisController = OVRInput.Controller.RTouch;
+        }
+        else {
+            thisController = OVRInput.Controller.LTouch;
+        }
     }
 
     // Update is called once per frame
     void Update() {
-        device = SteamVR_Controller.Input((int)trackedObj.index);
 
         // Left hand functionality - teleportation
-        if (isLeftHand) {
-            if (device.GetPress(SteamVR_Controller.ButtonMask.Grip)) {
+        if (!rightHand) {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, thisController)) {
                 laser.gameObject.SetActive(true);
                 teleportAimerObject.gameObject.SetActive(true);
 
@@ -61,12 +68,11 @@ public class OVRControllerInputManager : MonoBehaviour {
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
-                    teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y, teleportLocation.z);
+                    teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
                     //teleportLocation = transform.position + (transform.forward * 15);
-
                     if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, 10, laserMask)) {
                         teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, hit.point.y, transform.forward.z * 10 + transform.position.z);
                     }
@@ -77,7 +83,7 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
             }
 
-            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Grip)) {
+            if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, thisController)) {
                 laser.gameObject.SetActive(false);
                 teleportAimerObject.gameObject.SetActive(false);
                 player.transform.position = teleportLocation;
@@ -91,73 +97,57 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
             }
         }
-
-
+      
         // Right hand functionality - Menu
-        if (!isLeftHand) {
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad)) {
-                touchLast = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x;
-            }
-
-            if (device.GetTouch(SteamVR_Controller.ButtonMask.Touchpad)) {
+        if (rightHand) {
+            float menuStickX = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, thisController).x;
+            
+            if (OVRInput.GetDown(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 EnableMenu();
-                touchCurrent = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad).x; // get location of thumb with respect to x-axis
-                distance = touchCurrent - touchLast;
-                touchLast = touchCurrent; // cache our position for the next frame
-                swipeSum += distance;
-
-                if (!hasSwipedRight) {
-                    if (swipeSum > 0.5f) {
-                        swipeSum = 0;
-                        SwipeRight();
-                        hasSwipedRight = true;
-                        hasSwipedLeft = false;
+                if (menuStickX < 0.45f && menuStickX > -0.45f) {
+                    menuIsSwipable = true;
+                }
+                if (menuIsSwipable) {
+                    if (menuStickX >= 0.45f) {
+                        // fire function that looks at menuList,
+                        // disables current item, and enables next item
+                        objectMenu.MenuRight();
+                        menuIsSwipable = false;
+                    }
+                    else if (menuStickX <= -0.45f) {
+                        objectMenu.MenuLeft();
+                        menuIsSwipable = false;
                     }
                 }
 
-                if (!hasSwipedLeft) {
-                    if (swipeSum < -0.5f) {
-                        swipeSum = 0;
-                        SwipeLeft();
-                        hasSwipedLeft = true;
-                        hasSwipedRight = false;
-                    }
-                }
-
-                if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
-                    // Spawn object currently selected by menu
-                    SpawnObject();
+                if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, thisController)) {
+                    objectMenu.SpawnCurrentObject();
                 }
             }
 
-            // Restart variables when finger is lifted
-            if (device.GetTouchUp(SteamVR_Controller.ButtonMask.Touchpad)) {
-                swipeSum = 0;
-                touchCurrent = 0;
-                touchLast = 0;
-                hasSwipedLeft = false;
-                hasSwipedRight = false;
+            if (OVRInput.GetUp(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 DisableMenu();
             }
         }
     }
+    
 
     // Physics frames
     private void OnTriggerStay(Collider col) {
         if (col.gameObject.CompareTag("Throwable")) {
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, thisController)) {
                 GrabObject(col);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger)) {
+            else if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger, thisController)) {
                 ThrowObject(col);
             }
         }
 
         if (col.gameObject.CompareTag("Structure")) {
-            if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)) {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, thisController)) {
                 GrabObject(col);
             }
-            else if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger)) {
+            else if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger, thisController)) {
                 PlaceObject(col);
             }
         }
@@ -167,7 +157,7 @@ public class OVRControllerInputManager : MonoBehaviour {
     void GrabObject(Collider col) {
         col.transform.SetParent(gameObject.transform); // attach the object to our controller
         col.GetComponent<Rigidbody>().isKinematic = true; // turn off physics
-        device.TriggerHapticPulse(8000); // controller vibration
+        //device.TriggerHapticPulse(8000); // controller vibration
         Debug.Log("You are touching down the trigger on an object.");
     }
 
@@ -181,8 +171,8 @@ public class OVRControllerInputManager : MonoBehaviour {
         rigidBody.isKinematic = false; // turn on physics
 
         // Set velocity based on controller movement
-        rigidBody.velocity = device.velocity * throwForce;
-        rigidBody.angularVelocity = device.angularVelocity;
+        rigidBody.velocity = OVRInput.GetLocalControllerVelocity(thisController) * throwForce;
+        rigidBody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(thisController);
         Debug.Log("You have released the trigger");
     }
 
@@ -209,4 +199,5 @@ public class OVRControllerInputManager : MonoBehaviour {
     void DisableMenu() {
         objectMenu.gameObject.SetActive(false);
     }
+    
 }

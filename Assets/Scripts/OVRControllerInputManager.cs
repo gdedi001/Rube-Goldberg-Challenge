@@ -39,6 +39,7 @@ public class OVRControllerInputManager : MonoBehaviour {
     private string playArea = "PlayArea";
     private float yNudgeAmount = 1f; // specific to teleportAimerObject height
     private RaycastHit hit;
+    private int maxDistance = 10; // max distance that a player can teleport
 
 
     // Use this for initialization

@@ -13,7 +13,7 @@ public class ObjectMenuManager : MonoBehaviour {
 		foreach (Transform child in transform) {
             objectList.Add(child.gameObject);
         }
-	}
+    }
 	
     public void MenuLeft() {
         objectList[currentObject].SetActive(false);

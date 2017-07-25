@@ -37,9 +37,9 @@ public class OVRControllerInputManager : MonoBehaviour {
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
     private string playArea = "PlayArea";
-    private float yNudgeAmount = 1f; // specific to teleportAimerObject height
+    private float yNudgeAmount = 1.5f; // specific to teleportAimerObject height
+    private int maxDistance = 7; // max distance that a player can teleport
     private RaycastHit hit;
-    private int maxDistance = 10; // max distance that a player can teleport
 
 
     // Use this for initialization
@@ -106,7 +106,6 @@ public class OVRControllerInputManager : MonoBehaviour {
             if (OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 EnableMenu();
                 if (menuStickX < 0.45f && menuStickX > -0.45f) {
-                    Debug.Log("Standard Position");
                     menuIsSwipable = true;
                 }
                 if (menuIsSwipable) {
@@ -162,7 +161,6 @@ public class OVRControllerInputManager : MonoBehaviour {
         col.transform.SetParent(gameObject.transform); // attach the object to our controller
         col.GetComponent<Rigidbody>().isKinematic = true; // turn off physics
         //device.TriggerHapticPulse(8000); // controller vibration
-        Debug.Log("You are touching down the trigger on an object.");
     }
 
     void PlaceObject(Collider col) {
@@ -177,7 +175,6 @@ public class OVRControllerInputManager : MonoBehaviour {
         // Set velocity based on controller movement
         rigidBody.velocity = OVRInput.GetLocalControllerVelocity(thisController) * throwForce;
         rigidBody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(thisController);
-        Debug.Log("You have released the trigger");
     }
 
     
@@ -188,12 +185,10 @@ public class OVRControllerInputManager : MonoBehaviour {
 
     void SwipeLeft() {
         objectMenu.MenuLeft();
-        Debug.Log("SwipeLeft");
     }
 
     void SwipeRight() {
         objectMenu.MenuRight();
-        Debug.Log("SwipeRight");
     }
 
     void EnableMenu() {

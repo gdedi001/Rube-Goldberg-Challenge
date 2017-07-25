@@ -4,29 +4,15 @@ using UnityEngine;
 
 public class FanBlow : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     void OnTriggerStay(Collider col) {
-        GameObject ball = col.gameObject;
-        if (col.gameObject.name == "Ball") {
-            Debug.Log("hit fan");
-            Blow(ball);
+        GameObject obj = col.gameObject;
+        if (obj.name == "Ball") {
+            Blow(obj);
         }
     }
 
     void Blow(GameObject item) {
-
-        Debug.Log("Blowing...");
         int fanStrength = 35;
         item.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
     }
-    
 }

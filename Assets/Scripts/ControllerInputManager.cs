@@ -35,9 +35,9 @@ public class ControllerInputManager : MonoBehaviour {
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
     private string playArea = "PlayArea";
+    private float yNudgeAmount = 1.5f; // specific to teleportAimerObject height
+    private int maxDistance = 7;
     private RaycastHit hit;
-    private float yNudgeAmount = 1f; // specific to teleportAimerObject height
-    private int maxDistance = 10;
 
 
     // Use this for initialization

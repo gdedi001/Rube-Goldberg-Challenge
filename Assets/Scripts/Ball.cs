@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
     [SerializeField]
+    private List<GameObject> collectibleList; // holds all collectible prefabs in scene
+
+    // Responsible for enabling/disabling Ball when player is not in playarea
+    [SerializeField]
     private GameObject DisabledMarker;
     SphereCollider BallCollider;
 
@@ -13,8 +17,10 @@ public class Ball : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
         int floorLayer = 8;
+
         if (col.gameObject.layer == floorLayer) {
             ResetBall();
+            ResetCollectibles();
         }
     }
 
@@ -24,8 +30,7 @@ public class Ball : MonoBehaviour {
         rigidBody.velocity = new Vector3(0,0,0);
         //Vector3 resetPos = GetComponentInParent<Transform>().localPosition;
         Vector3 resetPos = GameObject.Find("Pedastal").GetComponent<Transform>().position;
-        gameObject.transform.position = new Vector3(resetPos.x, resetPos.y + yNudge, resetPos.z);
-        
+        gameObject.transform.position = new Vector3(resetPos.x, resetPos.y + yNudge, resetPos.z);      
     }
 
     public void DisableBall() {
@@ -36,5 +41,13 @@ public class Ball : MonoBehaviour {
     public void EnableBall() {
         BallCollider.enabled = true;
         DisabledMarker.SetActive(false);
+    }
+
+    void ResetCollectibles() {
+        foreach (GameObject collectible in collectibleList) {
+            if (!collectible.activeSelf) {
+                collectible.SetActive(true);
+            }
+        }
     }
 }

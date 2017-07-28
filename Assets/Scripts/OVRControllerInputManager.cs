@@ -25,7 +25,7 @@ public class OVRControllerInputManager : MonoBehaviour {
     private float menuStickX;
 
 
-    // Teleporter
+    // Teleporter & Player Rotation
     [SerializeField]
     private GameObject player;
     [SerializeField]
@@ -65,7 +65,7 @@ public class OVRControllerInputManager : MonoBehaviour {
 
                 laser.SetPosition(0, transform.position); // start laser from hand controller
 
-                if (Physics.Raycast(transform.position, transform.forward, out hit, 10, laserMask)) {
+                if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, laserMask)) {
                     teleportLocation = hit.point;
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
@@ -73,12 +73,12 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
-                    teleportLocation = transform.position + (transform.forward * 10);
-                    if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, 10, laserMask)) {
-                        teleportLocation = new Vector3(transform.forward.x * 10 + transform.position.x, hit.point.y, transform.forward.z * 10 + transform.position.z);
+                    teleportLocation = transform.position + (transform.forward * maxDistance);
+                    if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, maxDistance, laserMask)) {
+                        teleportLocation = new Vector3(transform.forward.x * maxDistance + transform.position.x, hit.point.y, transform.forward.z * maxDistance + transform.position.z);
                     }
 
-                    laser.SetPosition(1, transform.forward * 10 + transform.position);
+                    laser.SetPosition(1, transform.forward * maxDistance + transform.position);
                     // aimer position
                     teleportAimerObject.transform.position = teleportLocation + new Vector3(0, 0, 0);
                 }
@@ -103,6 +103,7 @@ public class OVRControllerInputManager : MonoBehaviour {
         if (rightHand) {
             menuStickX = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, thisController).x;
             
+            // enables menu with respective functionality
             if (OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, thisController)) {
                 EnableMenu();
                 if (menuStickX < 0.45f && menuStickX > -0.45f) {
@@ -110,7 +111,6 @@ public class OVRControllerInputManager : MonoBehaviour {
                 }
                 if (menuIsSwipable) {
                     if (menuStickX >= 0.45f) {
-                        Debug.Log("right");
                         // fire function that looks at menuList,
                         // disables current item, and enables next item
                         objectMenu.MenuRight();
@@ -198,5 +198,4 @@ public class OVRControllerInputManager : MonoBehaviour {
     void DisableMenu() {
         objectMenu.gameObject.SetActive(false);
     }
-    
 }

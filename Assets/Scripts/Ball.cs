@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
     [SerializeField]
-    private List<GameObject> collectibleList; // holds all collectible prefabs in scene
+    private Goal goal;
 
     // Responsible for enabling/disabling Ball when player is not in playarea
     [SerializeField]
@@ -44,7 +44,9 @@ public class Ball : MonoBehaviour {
     }
 
     void ResetCollectibles() {
-        foreach (GameObject collectible in collectibleList) {
+        //reset counter for active collectibles
+        goal.resetCounter();
+        foreach (GameObject collectible in goal.collectibleList) {
             if (!collectible.activeSelf) {
                 collectible.SetActive(true);
             }

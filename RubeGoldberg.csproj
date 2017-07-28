@@ -135,6 +135,7 @@
     <Compile Include="Assets\Scripts\Collectible.cs" />
     <Compile Include="Assets\Scripts\ControllerInputManager.cs" />
     <Compile Include="Assets\Scripts\FanBlow.cs" />
+    <Compile Include="Assets\Scripts\Goal.cs" />
     <Compile Include="Assets\Scripts\OVRControllerInputManager.cs" />
     <Compile Include="Assets\Scripts\ObjectMenuManager.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />

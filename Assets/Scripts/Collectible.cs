@@ -17,5 +17,10 @@ public class Collectible : MonoBehaviour {
 
     void collectItem() {
         goal.decrementCounter();
+        playCollectSound();
+    }
+
+    void playCollectSound() {
+        gameObject.GetComponent<AudioSource>().Play();
     }
 }

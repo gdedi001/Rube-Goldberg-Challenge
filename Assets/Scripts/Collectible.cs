@@ -6,18 +6,19 @@ public class Collectible : MonoBehaviour {
     [SerializeField]
     private Goal goal;
 
+
     void OnTriggerEnter(Collider col) {
         GameObject obj = col.gameObject;
         if (obj.name == "Ball") {
-            this.gameObject.SetActive(false);
+           
             collectItem();
-            //Debug.Log("Available Stars " + goal.getAvailableCollectibles());
+            this.gameObject.SetActive(false);
         }
     }
 
     void collectItem() {
-        goal.decrementCounter();
         playCollectSound();
+        goal.decrementCounter();
     }
 
     void playCollectSound() {

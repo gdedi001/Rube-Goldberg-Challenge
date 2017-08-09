@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour {
     [SerializeField]
+    private string nextScene;
+    [SerializeField]
     public List<GameObject> collectibleList; // holds all collectible prefabs in scene
     private bool levelCompleted = false; // flag to determine if the player has collected all collectibles
 
@@ -39,19 +41,19 @@ public class Goal : MonoBehaviour {
         AvailableCollectibles--;
     }
 
-    private void sceneLoad() {
+    private void sceneLoad(string nextScene) {
         if (levelCompleted) {
-            Debug.Log("Level Loading..");
+            SteamVR_LoadLevel.Begin(nextScene);
         }
     }
 
     private void checkStatus() {
         if (getAvailableCollectibles() == 0) {
             levelCompleted = true;
-            sceneLoad();
+            sceneLoad(nextScene);
         }
         else {
-            this.GetComponent<AudioSource>().Play();
+            gameObject.GetComponent<AudioSource>().Play();
         }
     }
 

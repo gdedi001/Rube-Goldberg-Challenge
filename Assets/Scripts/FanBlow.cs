@@ -12,7 +12,7 @@ public class FanBlow : MonoBehaviour {
     }
 
     void Blow(GameObject item) {
-        int fanStrength = 35;
+        int fanStrength = 45;
         item.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
     }
 }

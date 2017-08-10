@@ -137,6 +137,7 @@
     <Compile Include="Assets\Scripts\FanBlow.cs" />
     <Compile Include="Assets\Scripts\Goal.cs" />
     <Compile Include="Assets\Scripts\HeadsetManager.cs" />
+    <Compile Include="Assets\Scripts\NotificationManager.cs" />
     <Compile Include="Assets\Scripts\OVRControllerInputManager.cs" />
     <Compile Include="Assets\Scripts\ObjectMenuManager.cs" />
     <Compile Include="Assets\Scripts\StartButton.cs" />

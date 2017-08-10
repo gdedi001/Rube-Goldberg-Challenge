@@ -33,6 +33,8 @@ public class OVRControllerInputManager : MonoBehaviour {
     [SerializeField]
     private LayerMask laserMask; // Where you can teleport to
     [SerializeField]
+    private LayerMask invalidLaserMask; // Where you cannot teleport to
+    [SerializeField]
     private GameObject teleportAimerObject; // teleport cylinder
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
@@ -71,10 +73,14 @@ public class OVRControllerInputManager : MonoBehaviour {
                     // aimer position
                     teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
                 }
+                else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, invalidLaserMask)) {
+                    laser.gameObject.SetActive(false);
+                    teleportAimerObject.gameObject.SetActive(false);
+                    teleportLocation = player.transform.position;
+                }
                 else {
-                    // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);
                     teleportLocation = transform.position + (transform.forward * maxDistance);
-                    if (Physics.Raycast(teleportLocation, -Vector3.up, out hit, maxDistance, laserMask)) {
+                    if (Physics.Raycast(teleportLocation, Vector3.down, out hit, maxDistance, laserMask)) {
                         teleportLocation = new Vector3(transform.forward.x * maxDistance + transform.position.x, hit.point.y, transform.forward.z * maxDistance + transform.position.z);
                     }
 

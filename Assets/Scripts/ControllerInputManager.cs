@@ -31,12 +31,14 @@ public class ControllerInputManager : MonoBehaviour {
     [SerializeField]
     private LayerMask laserMask; // Where you can teleport to
     [SerializeField]
+    private LayerMask invalidLaserMask; // Where you cannot teleport to
+    [SerializeField]
     private GameObject teleportAimerObject; // teleport cylinder
     private LineRenderer laser; // laser pointer
     private Vector3 teleportLocation; // teleport 3D position
     private string playArea = "PlayArea";
     private float yNudgeAmount = 1.5f; // specific to teleportAimerObject height
-    private int maxDistance = 7;
+    private int maxDistance = 5;
     private RaycastHit hit;
 
 
@@ -63,6 +65,11 @@ public class ControllerInputManager : MonoBehaviour {
                     laser.SetPosition(1, teleportLocation);
                     // aimer position
                     teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
+                }
+                else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, invalidLaserMask)) {
+                    laser.gameObject.SetActive(false);
+                    teleportAimerObject.gameObject.SetActive(false);
+                    teleportLocation = player.transform.position;
                 }
                 else {
                     // teleportLocation = new Vector3(transform.forward.x * 15 + transform.position.x, transform.forward.y * 15 + transform.position.y, transform.forward.z * 15 + transform.position.z);

@@ -12,6 +12,7 @@ public class OVRControllerInputManager : MonoBehaviour {
     // Force applied to thrown objects
     private float throwForce = 1.5f;
 
+
     // Menu / Swipping mechanism
     [SerializeField]
     private ObjectMenuManager objectMenu;

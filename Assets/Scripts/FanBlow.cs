@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FanBlow : MonoBehaviour {
+    [Range(0, 50)]
+    public int fanStrength = 0;
 
     void OnTriggerStay(Collider col) {
         GameObject obj = col.gameObject;
@@ -12,7 +14,6 @@ public class FanBlow : MonoBehaviour {
     }
 
     void Blow(GameObject item) {
-        int fanStrength = 45;
         item.GetComponent<Rigidbody>().AddForce(-transform.forward * fanStrength, ForceMode.Acceleration);
     }
 }

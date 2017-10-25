@@ -25,6 +25,6 @@ This project was about combining various ideas and skills I've been practicing t
 
 
 ## SDK
--SteamVR
--Oculus SDK (v1.16.0)
+-SteamVR<br>
+-Oculus SDK (v1.16.0)<br>
 -Oculus Avatar SDK (v1.16.0)

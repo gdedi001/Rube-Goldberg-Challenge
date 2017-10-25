@@ -1,4 +1,6 @@
-﻿/************************************************************************************
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+/************************************************************************************
 
 Copyright   :   Copyright 2014 Oculus VR, LLC. All Rights reserved.
 
@@ -75,7 +77,7 @@ Shader "Custom/ColumnGlow"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.normal = normalize(mul(UNITY_MATRIX_IT_MV,v.normal).xyz);
 				o.origPosition = v.vertex;
 				o.eyeDir = -normalize(mul(UNITY_MATRIX_MV, v.vertex).xyz);

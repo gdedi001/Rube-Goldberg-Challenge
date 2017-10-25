@@ -19,11 +19,16 @@ public class StartOrb : MonoBehaviour {
     void OnTriggerEnter(Collider col) {
         if (col.gameObject.name == "Ball") {
             removeInstructions();
+            playSound();
         }
     }
 
     void removeInstructions() {
         gameObject.SetActive(false);
             instructions.SetActive(false);
-    } 
+    }
+
+    void playSound() {
+        gameObject.GetComponent<AudioSource>().Play();
+    }
 }

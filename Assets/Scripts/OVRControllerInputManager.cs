@@ -74,14 +74,14 @@ public class OVRControllerInputManager : MonoBehaviour {
                     // aimer position
                     teleportAimerObject.transform.position = new Vector3(teleportLocation.x, teleportLocation.y + yNudgeAmount, teleportLocation.z);
                 }
-                else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, invalidLaserMask)) {
+                /*else if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, invalidLaserMask)) {
                     laser.gameObject.SetActive(false);
                     teleportAimerObject.gameObject.SetActive(false);
                     teleportLocation = player.transform.position;
-                }
+                }*/
                 else {
-                    teleportLocation = transform.position + (transform.forward * maxDistance);
-                    if (Physics.Raycast(teleportLocation, Vector3.down, out hit, maxDistance, laserMask)) {
+                    Vector3 tempTeleportLocation = transform.position + (transform.forward * maxDistance);
+                    if (Physics.Raycast(tempTeleportLocation, Vector3.down, out hit, maxDistance, laserMask)) {
                         teleportLocation = new Vector3(transform.forward.x * maxDistance + transform.position.x, hit.point.y, transform.forward.z * maxDistance + transform.position.z);
                     }
 
@@ -97,7 +97,7 @@ public class OVRControllerInputManager : MonoBehaviour {
                 player.transform.position = teleportLocation;
 
                 // Prevent cheating - disabled the ball when player is not on platform, enable otherwise
-                if (hit.transform.gameObject.tag != playArea) {
+                if (hit.transform.gameObject && hit.transform.gameObject.tag != playArea) {
                     ball.DisableBall();
                 }
                 else {

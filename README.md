@@ -1,13 +1,18 @@
-# README #
+# Rube Goldberg Challenge - High Immersion Specialization (Project 1)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+![Alt text](/Screenshots/Screenshot.png?raw=true "Gameplay")
 
-This is the starter project for Rube Goldberg Challenge
+## Overview
+This project was a chance for me to create my first fully-functional multi-platform high-immersion VR game. The goal of this project was to create a Rube Goldberg game that challenges players to create contraptions that solve physics puzzles.
 
-### What is this repository for? ###
+First you’ll import SteamVR and set up your scene environment. Then you’ll add locomotion, grabbing physics, and a menu system. With the core components built, you’ll import the Oculus SDK and create Oculus versions of your code. Lastly you’ll use your creativity to create a number of unique objects and levels.
 
-* You should find everything you need in `VRND_C8A_ProjectAssetPack/Assets`
+## Some Challenges
 
-## Core Projects Concepts
-This project is about combining various ideas and skills I've been practicing throughout the course. They include:
+One of my most notable challenges was preventing the player from being able to teleport outside the map.
+
+## Skills utilized
+This project was about combining various ideas and skills I've been practicing throughout the course. They include:
 
 * Adding SteamVR and the Oculus SDK to a Unity Project
 * Designing gameplay for 6DOF hand controllers
@@ -18,3 +23,9 @@ This project is about combining various ideas and skills I've been practicing th
 * Designing anti-cheat mechanisms
 * Integrating SteamVR and Oculus input handling in the same project
 * Creating dynamic 3D objects
+
+
+## SDK
+SteamVR
+Oculus SDK (v1.16.0)
+Oculus Avatar SDK (v1.16.0)

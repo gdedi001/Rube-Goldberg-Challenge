@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FanBlow : MonoBehaviour {
-    [Range(0, 50)]
+    [Range(10, 60)]
     public int fanStrength = 0;
 
     void OnTriggerStay(Collider col) {

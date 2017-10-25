@@ -1,5 +1,4 @@
 # Rube Goldberg Challenge - High Immersion Specialization (Project 1)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 ![Alt text](/Screenshots/Screenshot.png?raw=true "Gameplay")
 
 ## Overview
@@ -26,6 +25,6 @@ This project was about combining various ideas and skills I've been practicing t
 
 
 ## SDK
-SteamVR
-Oculus SDK (v1.16.0)
-Oculus Avatar SDK (v1.16.0)
+-SteamVR
+-Oculus SDK (v1.16.0)
+-Oculus Avatar SDK (v1.16.0)

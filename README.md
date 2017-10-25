@@ -4,7 +4,7 @@
 ## Overview
 This project was a chance for me to create my first fully-functional multi-platform high-immersion VR game. The goal of this project was to create a Rube Goldberg game that challenges players to create contraptions that solve physics puzzles.
 
-First you’ll import SteamVR and set up your scene environment. Then you’ll add locomotion, grabbing physics, and a menu system. With the core components built, you’ll import the Oculus SDK and create Oculus versions of your code. Lastly you’ll use your creativity to create a number of unique objects and levels.
+First I imported SteamVR and set up up my scene environment. Then my task was to add locomotion, grabbing physics, and a menu system. With the core components built, I then imported the Oculus SDK and created Oculus versions of my code. Lastly I used my creativity to create a number of unique objects and levels.
 
 ## Some Challenges
 

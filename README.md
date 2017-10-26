@@ -1,4 +1,4 @@
-# Rube Goldberg Challenge - High Immersion Specialization (Project 1)
+# Rube Goldberg Challenge - High Immersion Specialization
 ![Alt text](/Screenshots/Screenshot.png?raw=true "Gameplay")
 
 ## Overview

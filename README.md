@@ -28,3 +28,6 @@ This project was about combining various ideas and skills I've been practicing t
 -SteamVR<br>
 -Oculus SDK (v1.16.0)<br>
 -Oculus Avatar SDK (v1.16.0)
+
+## Controller Scheme
+![Alt text](/Screenshots/oculusTouch.jpg?raw=true "Controller Mappings Oculus")
